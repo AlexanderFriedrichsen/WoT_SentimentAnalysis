@@ -8,6 +8,7 @@
 
 #First we tokenize
 
+
 from typing import Dict
 import pandas as pd
 import numpy as np
@@ -19,6 +20,7 @@ import shifterator as sh
 plt.style.use('bmh')
 from nltk.corpus import webtext
 from nltk.probability import FreqDist
+from collections import Counter
  
 
 #take all the .txt files for WoT and compile them into one
@@ -50,9 +52,10 @@ def tokenize(text):
 def create_frequency_dictionary(text: str) -> Dict:
     # nltk.download(text)
     # wt_words = webtext.words('testing.txt')
-    data_analysis = nltk.FreqDist(text)
+    #data_analysis = nltk.FreqDist(text)
+    return Counter(text)
     # Let's take the specific words only if their frequency is greater than 3.
-    return (dict([(m, n) for m, n in data_analysis.items() if len(m) > 3]))
+    #return (dict([(m, n) for m, n in data_analysis.items() if len(m) > 3]))
 
 
 # frequency dictionary for book 1:
@@ -69,7 +72,7 @@ freq_dict_1 = create_frequency_dictionary(tokenized)
 # data_analysis.plot(25, cumulative=False)
 
 # frequency dictionary for book 8
-book_8_path = "C:/Users/alexp/Documents/GitHub/WoT_SentimentAnalysis/all_texts_WoT/The-Wheel-of-Time-08_-Robert-Jordan-The-Eye-of-the-World.txt"
+book_8_path = "C:/Users/alexp/Documents/GitHub/WoT_SentimentAnalysis/all_texts_WoT/The-Wheel-of-Time-08_-Robert-Jordan-The-Path-of_Daggers.txt"
 print("loading files..")
 text = load_file(book_8_path)
 print("tokenizing..")
@@ -79,7 +82,10 @@ freq_dict_2 = create_frequency_dictionary(tokenized)
 # a couple notes before we start making the word shifts:
 # stop_lens=[(4,6)] will exclude words with scores that are between 4 and 6 valence
 print("creating wordshift")
+
+#print(freq_dict_1)
 sentiment_shift = sh.WeightedAvgShift(freq_dict_1,
                                       freq_dict_2,
                                       'labMT_English',
-                                      stop_lens=[(4,6)])
+                                      stop_lens=[(3,7)])
+sentiment_shift.get_shift_graph(detailed=True, system_names=['The-Eye-of-the-World','The-Path-of_Daggers'])
