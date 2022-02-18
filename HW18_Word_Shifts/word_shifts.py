@@ -84,8 +84,10 @@ freq_dict_2 = create_frequency_dictionary(tokenized)
 print("creating wordshift")
 
 #print(freq_dict_1)
-sentiment_shift = sh.WeightedAvgShift(freq_dict_1,
-                                      freq_dict_2,
+sentiment_shift = sh.WeightedAvgShift(freq_dict_2,
+                                      freq_dict_1,
                                       'labMT_English',
-                                      stop_lens=[(3,7)])
-sentiment_shift.get_shift_graph(detailed=True, system_names=['The-Eye-of-the-World','The-Path-of_Daggers'])
+                                      reference_value = "average",
+                                      stop_lens=[(5,5)])
+sentiment_shift.get_shift_graph(detailed=True, system_names=['The-Path-of_Daggers','The-Eye-of-the-World'])
+
